@@ -1,4 +1,4 @@
-# Software Engineering Project 2022-2023
+This is the Software Engineering project for the Software Engineering class (7th semester, ECE NTUA, 2022-2023).
 
 Group: softeng2022-68
 
