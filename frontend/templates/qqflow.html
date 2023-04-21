@@ -1,0 +1,20 @@
+{% extends "global_layout.html" %}
+
+{% block title %}
+Flow information
+{% endblock title %}
+
+{% block content %}
+<script src="../templates/qqflow.js"></script>
+<!-- all other templates are to be rendered "within" the following block -->
+<h1 style="font-size: 1.7em; text-align: center;">Specify the flow of the questionnaire</h1>
+<div id="questionsContainer" style="text-align: center;"></div><br>
+<script>
+    //call after page loaded
+    window.onload = displayQuestions(); 
+</script><br>
+<button class="btn btn-danger" onclick="submitQnext()"
+    style="margin: 0 auto; display: block; font-size: 28px; font-weight: bold;">Submit</button>
+<br>
+<div id="output"></div>
+{% endblock content %}

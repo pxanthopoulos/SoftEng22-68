@@ -1,0 +1,39 @@
+{% extends "global_layout.html" %}
+
+{% block title %}
+Answer Questionnaire
+{% endblock title %}
+
+
+{% block content %}
+<script src="../templates/qqanswer.js"></script>
+<div id="header">
+
+</div>
+<div class="card" id="card-container" style="text-align: center; height: 370px; width: 80%; margin: 0 auto;">         
+    <div class="card-body" id="card">
+        <div class="table-responsive" style="text-align: center;"> 
+            <div id="mask" style="display: none;">
+                <h2>Enter your email</h2>
+                <input type="text" id="mail" placeholder="This field is required"/>
+            </div><br></br>
+            <div>
+                <button id="beginButton" class="btn btn-danger"  onclick="checkMask()"
+                style="margin: 0 auto; display: none;">Begin</button>
+            </div>
+        </div>
+    </div>
+    <button id="submitButton" class="btn btn-danger"  onclick="getSession()"
+    style="margin: 0 auto; display: none;">Submit</button>
+</div>
+</div>
+<br/>
+
+
+    <script>
+        //call after page loaded
+        window.onload = display(); 
+    </script>
+
+
+{% endblock content %}

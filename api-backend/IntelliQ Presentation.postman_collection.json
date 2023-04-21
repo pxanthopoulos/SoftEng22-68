@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "1f6cdd20-7243-493e-99b0-233edba7a79c",
+		"name": "IntelliQ Presentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25340447"
+	},
+	"item": [
+		{
+			"name": "Add Sample Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/insert_sampledata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"insert_sampledata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Questionnaire",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"QQID\", \"QQ1\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"QQ1\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/questionnaire/{{QQID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"questionnaire",
+						"{{QQID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Answer Questionnaire",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q1\")\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"            url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q1/VPDX/C1\",\r",
+							"            method: \"POST\",\r",
+							"        }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q2\")\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q2/VPDX/C1\", \r",
+							"    method: \"POST\"\r",
+							"    }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q3\")\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q3/VPDX/C1\", \r",
+							"    method: \"POST\"\r",
+							"    }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q6\")\r",
+							"\r",
+							"pm.sendRequest({\r",
+							" url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q6/VPDX/C2\",\r",
+							" method: \"POST\"\r",
+							" }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q7\")\r",
+							"\r",
+							"pm.sendRequest({url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q7/VPDX/C3\",\r",
+							" method: \"POST\"\r",
+							" }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							"pm.sendRequest(\"http://localhost:9103/intelliq_api/question/QQ1/Q11\")\r",
+							"\r",
+							"pm.sendRequest({url: \"http://localhost:9103/intelliq_api/doanswer/QQ1/Q11/VPDX/C1\",\r",
+							" method: \"POST\"\r",
+							" }, function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/{{QQID}}/{{QID}}/{{session}}/{{optionID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						"{{QQID}}",
+						"{{QID}}",
+						"{{session}}",
+						"{{optionID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Session Answers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"QQID\", \"QQ1\");\r",
+							"pm.environment.set(\"session\", \"VPDX\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/{{QQID}}/{{session}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						"{{QQID}}",
+						"{{session}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "QQID",
+			"value": "QQ1"
+		},
+		{
+			"key": "QID",
+			"value": "Q1"
+		},
+		{
+			"key": "session",
+			"value": "PRES"
+		},
+		{
+			"key": "optionID",
+			"value": "C1"
+		}
+	]
+}

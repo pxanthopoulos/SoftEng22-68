@@ -1,0 +1,67 @@
+{% extends "global_layout.html" %}
+
+{% block title %}
+Questions & Options
+{% endblock title %}
+
+{% block content %}
+<div id="error-box" style="
+        display: none;
+        background-color: #ff0000; /* pale red */
+        color: white;
+        position: fixed;
+        bottom: 0%;
+        left: 40%;
+        width: 20%;
+        height: 90px;
+        z-index: 1;
+        text-align: center;
+        padding: 10px 20px;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;">
+	<div class="error-content" style="white-space: pre-line;">
+		Error: You must fill all the fields!
+		Make sure the mandatory and type fields are in the correct format!
+		<span class="error-closebtn" style="color: rgb(0, 0, 0);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 10px;" onclick="document.getElementById('error-box').style.display='none';">&times;</span>
+	</div>
+</div>
+<form id="questionContainer" style="text-align: center;">
+	<div id="question1">
+		<h1 style="font-size: 1.7em;">Question 1</h1>
+		<label style="font-size: 1.2em;">Question ID</label><br>
+		<input type="text" name="qid" placeholder="Max length 10 characters" /><br>
+		<label style="font-size: 1.2em;">Question text</label><br>
+		<input type="text" name="qtext" placeholder="Max length 255 characters" /><br> <br>
+		<label style="font-size: 1.2em;">Is the question mandatory?</label><br>
+		<input type="text" name="mandatory" placeholder="TRUE or FALSE" /><br>
+		<label style="font-size: 1.2em;">Type of question</label><br>
+		<input type="text" name="type" placeholder="profile or question" /><br><br>
+		<input type="button" value="+" class="btn btn-danger" onclick="addOption(1)"
+			style="margin: 0 auto; display: block;" /><br>
+		<div id="optionsContainer1">
+			<div id="option1">
+				<label style="font-size: 1.2em;">Option ID</label><br>
+				<input type="text" name="opt" placeholder="Max length 10 characters" /><br>
+				<label style="font-size: 1.2em;">Option Text</label><br>
+				<input type="text" name="opttxt" placeholder="Max length 255 characters" /><br>
+			</div>
+		</div>
+		<br><br>
+	</div>
+</form>
+<button class="btn btn-danger" onclick="addQuestion()" style="margin: 0 auto; display: block;">Add new
+	question</button><br>
+<br><br><button class="btn btn-danger" onclick="parseQuestions()"
+	style="margin: 0 auto; display: block; font-size: 28px; font-weight: bold;">Submit</button><br>
+<br>
+<div id="output"></div>
+<script src="../templates/qqcreation.js"></script>
+{% endblock content %}

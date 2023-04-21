@@ -1,0 +1,59 @@
+{% extends "global_layout.html" %}
+
+{% block title %}
+Initial Data
+{% endblock title %}
+
+{% block content %}
+<div id="error-box" style="
+        display: none;
+        background-color: #ff0000; /* pale red */
+        color: white;
+        position: fixed;
+        bottom: 0%;
+        left: 37.5%;
+        width: 25%;
+        height: 100px;
+        z-index: 1;
+        text-align: center;
+        padding: 10px 20px;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;">
+    <div class="error-content">
+        Error: You must specify the Questionnaire ID and Title! Also make sure the domain is a valid one!
+        <span class="error-closebtn" style="color: rgb(0, 0, 0);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 10px;" onclick="document.getElementById('error-box').style.display='none';">&times;</span>
+    </div>
+</div>
+<form id="questionnaireContainer" style="text-align: center;">
+    <div id=" questionnaire">
+        <h1 style="font-size: 1.7em;">Insert the general data for the questionnaire</h1>
+        <label style="font-size: 1.2em;">Questionnaire ID:</label><br>
+        <input type="text" id="qqid" placeholder="Max length 10 characters" /><br><br>
+        <label style="font-size: 1.2em;">Questionnaire Title:</label><br>
+        <input type="text" id="qqtitle" placeholder="Max length 255 characters" /><br><br>
+        <label style="font-size: 1.2em;">Mask (domain of emails allowed to answer the questionnaire):</label><br>
+        <input type="text" id="qqmask" placeholder="E.g.: @mail.ntua.gr, @cn.ntua.gr" /><br><br>
+        <input type="button" value="+" class="btn btn-danger" onclick="addKeyword()"
+            style="margin: 0 auto; display: block;" /><br>
+        <div id="keywordContainer">
+            <div id="keyword1">
+                <label style="font-size: 1.2em;">Keywords:</label><br>
+                <input type="text" class="keyword" />
+            </div>
+        </div>
+    </div>
+</form>
+<br><br><button class="btn btn-danger" onclick="parseQQdata()"
+    style="margin: 0 auto; display: block; font-size: 28px; font-weight: bold;">Submit</button><br>
+<br>
+<div id="output"></div>
+<script src="../templates/qqinit.js"></script>
+{% endblock content %}

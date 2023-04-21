@@ -1,0 +1,1041 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "IntelliQ API",
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/intelliq_api/doanswer/{questionnaireID}/{questionID}/{session}/{optionID}": {
+            "post": {
+                "summary": "Add an answer to the database",
+                "description": "Adds an answer to a question in the database",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "questionnaireID",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "The questionnaire ID of the answer to add"
+                    },
+                    {
+                        "in": "path",
+                        "name": "questionID",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "The question ID of the answer to add"
+                    },
+                    {
+                        "in": "path",
+                        "name": "session",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "The session ID of the answer to add"
+                    },
+                    {
+                        "in": "path",
+                        "name": "optionID",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "The option ID of the answer to add"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The answer was added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Answer added successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Missing required parameters: questionnaireID, questionID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/getlastsessid": {
+            "get": {
+                "summary": "Get last session ID",
+                "description": "Returns the lexicographically last session ID",
+                "produces": [
+                    "application/json",
+                    "text/csv"
+                ],
+                "parameters": [
+                    {
+                        "name": "format",
+                        "description": "Response format (json or csv)",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "json",
+                            "csv"
+                        ],
+                        "default": "json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the last sessid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "sessionID": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Returned if required parameters are missing",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Returned if no data is found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Returned if internal error occurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/getquestionanswers/{questionnaireID}/{questionID}": {
+            "get": {
+                "summary": "Get answers for a given question",
+                "description": "Returns the answers to a given question",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "questionnaireID",
+                        "description": "The ID of the questionnaire",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "questionID",
+                        "description": "The ID of the question",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "format",
+                        "description": "The format to return the data in, either JSON or CSV",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "csv",
+                                "json"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The answers to the question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "questionnaireID": {
+                                            "type": "string"
+                                        },
+                                        "questionID": {
+                                            "type": "string"
+                                        },
+                                        "answers": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "session": {
+                                                        "type": "string"
+                                                    },
+                                                    "ans": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request. Returns if no sessionID or questionnaireID is provided.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "No data. Returns if no data is found for the given questionnaireID and questionID.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/getsessionanswers/{questionnaireID}/{session}": {
+            "get": {
+                "summary": "Get answers for a given session",
+                "description": "Returns the answers for a given session",
+                "produces": [
+                    "application/json",
+                    "text/csv"
+                ],
+                "parameters": [
+                    {
+                        "name": "questionnaireID",
+                        "description": "ID of the questionnaire",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "session",
+                        "description": "Session ID",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "format",
+                        "description": "Response format (json or csv)",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "json",
+                            "csv"
+                        ],
+                        "default": "json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the answers of the session",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "questionnaireID": {
+                                            "type": "string"
+                                        },
+                                        "session": {
+                                            "type": "string"
+                                        },
+                                        "answers": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "qID": {
+                                                        "type": "string"
+                                                    },
+                                                    "ans": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "text/csv": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Returned if required parameters are missing",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Returned if no data is found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Returned if internal error occurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/question/{questionnaireID}/{questionID}": {
+            "get": {
+                "summary": "Get data for a specific question",
+                "description": "Returns data for a specific question.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "questionnaireID",
+                        "required": true,
+                        "description": "ID of the questionnaire the question belongs to"
+                    },
+                    {
+                        "in": "path",
+                        "name": "questionID",
+                        "required": true,
+                        "description": "ID of the question"
+                    },
+                    {
+                        "in": "query",
+                        "name": "format",
+                        "description": "Format for the returned data (either \"csv\" or \"json\")"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully returned data for the specified question",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "questionnaireID": {
+                                            "type": "string",
+                                            "description": "ID of the questionnaire the question belongs to"
+                                        },
+                                        "qID": {
+                                            "type": "string",
+                                            "description": "ID of the question"
+                                        },
+                                        "qtext": {
+                                            "type": "string",
+                                            "description": "Text of the question"
+                                        },
+                                        "required": {
+                                            "type": "string",
+                                            "description": "Indicates whether the question is required (either \"true\" or \"false\")"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Type of the question (either \"question\" or \"profile\")"
+                                        },
+                                        "options": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "optID": {
+                                                        "type": "string",
+                                                        "description": "ID of the option"
+                                                    },
+                                                    "opttxt": {
+                                                        "type": "string",
+                                                        "description": "Text of the option"
+                                                    },
+                                                    "nextqID": {
+                                                        "type": "string",
+                                                        "description": "ID of the next question"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No questionnaireID or questionID was provided"
+                    },
+                    "402": {
+                        "description": "No data was found for the specified questionnaireID and questionID"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/intelliq_api/questionnaire/{questionnaireID}": {
+            "get": {
+                "summary": "Get questionnaire information",
+                "description": "Returns the information of a specific questionnaire",
+                "parameters": [
+                    {
+                        "name": "questionnaireID",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the questionnaire",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "questionnaireID": {
+                                            "type": "string"
+                                        },
+                                        "questionnaireTitle": {
+                                            "type": "string"
+                                        },
+                                        "keywords": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "questions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "qid": {
+                                                        "type": "string"
+                                                    },
+                                                    "qtext": {
+                                                        "type": "string"
+                                                    },
+                                                    "required": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "true",
+                                                            "false"
+                                                        ]
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "profile",
+                                                            "question"
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing required parameter: questionnaireID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Missing required parameter: questionnaireID"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "No data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No data"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "text/csv"
+                ]
+            }
+        },
+        "/intelliq_api/admin/healthcheck": {
+            "get": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Check the health of the API and its database connection",
+                "description": "Returns the status of the API and its database connection as a JSON object. A status of \"OK\" and \"Connected\" indicate that everything is functioning properly.",
+                "responses": {
+                    "200": {
+                        "description": "Health check was successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        },
+                                        "dbconnection": {
+                                            "type": "string",
+                                            "example": "Connected"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error message"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/admin/insert_testdata": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "description": "Insert test data into the database",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully inserted test data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "Indicates if the test data insertion was successful or not"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "Indicates if the test data insertion was successful or not"
+                                        },
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "description": "Error message"
+                                                },
+                                                "code": {
+                                                    "type": "string",
+                                                    "description": "Error code"
+                                                },
+                                                "errno": {
+                                                    "type": "integer",
+                                                    "description": "Error number"
+                                                },
+                                                "sql": {
+                                                    "type": "string",
+                                                    "description": "SQL statement that caused the error"
+                                                },
+                                                "sqlState": {
+                                                    "type": "string",
+                                                    "description": "SQL state"
+                                                },
+                                                "sqlMessage": {
+                                                    "type": "string",
+                                                    "description": "SQL error message"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/admin/questionnaire_upd": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Update a questionnaire",
+                "description": "Updates the questionnaire details in the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "questionnaire",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "questionnaireID",
+                                "questionnaireTitle",
+                                "keywords",
+                                "questions"
+                            ],
+                            "properties": {
+                                "questionnaireID": {
+                                    "type": "string",
+                                    "description": "Unique identifier for the questionnaire",
+                                    "maxLength": 10
+                                },
+                                "questionnaireTitle": {
+                                    "type": "string",
+                                    "description": "Title of the questionnaire",
+                                    "maxLength": 255
+                                },
+                                "keywords": {
+                                    "type": "array",
+                                    "description": "Keywords associated with the questionnaire",
+                                    "items": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    }
+                                },
+                                "questions": {
+                                    "type": "array",
+                                    "description": "List of questions in the questionnaire",
+                                    "items": {
+                                        "type": "object",
+                                        "required": [
+                                            "qID",
+                                            "qtext",
+                                            "required",
+                                            "type",
+                                            "options"
+                                        ],
+                                        "properties": {
+                                            "qID": {
+                                                "type": "string",
+                                                "description": "Unique identifier for the question",
+                                                "maxLength": 10
+                                            },
+                                            "qtext": {
+                                                "type": "string",
+                                                "description": "Text of the question",
+                                                "maxLength": 255
+                                            },
+                                            "required": {
+                                                "type": "string",
+                                                "description": "Indicates if the question is required or not",
+                                                "enum": [
+                                                    true,
+                                                    false
+                                                ]
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "description": "Type of the question (profile or question)",
+                                                "enum": [
+                                                    "profile",
+                                                    "question"
+                                                ]
+                                            },
+                                            "options": {
+                                                "type": "array",
+                                                "description": "List of options for the question",
+                                                "items": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "optID",
+                                                        "opttxt",
+                                                        "nextqID"
+                                                    ],
+                                                    "properties": {
+                                                        "optID": {
+                                                            "type": "string",
+                                                            "description": "Unique identifier for the option",
+                                                            "maxLength": 10
+                                                        },
+                                                        "opttxt": {
+                                                            "type": "string",
+                                                            "description": "Text of the option",
+                                                            "maxLength": 255
+                                                        },
+                                                        "nextqID": {
+                                                            "type": "string",
+                                                            "description": "Identifier for the next question to be asked based on this option",
+                                                            "maxLength": 10
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request (malformed input)"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/intelliq_api/admin/resetall": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Reset all tables in the database",
+                "description": "Reset all tables in the database",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "OK"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "reason": {
+                                            "type": "string",
+                                            "example": "Error message."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/intelliq_api/admin/resetq/{questionnaireID}": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Reset a questionnaire",
+                "description": "Resets the specified questionnaire in the database",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "questionnaireID",
+                        "required": true,
+                        "description": "The ID of the questionnaire to reset",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The questionnaire was reset successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "OK"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No questionnaire ID was provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "failed"
+                                            ]
+                                        },
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error occurred while resetting the questionnaire",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "failed"
+                                            ]
+                                        },
+                                        "reason": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {},
+    "tags": []
+}

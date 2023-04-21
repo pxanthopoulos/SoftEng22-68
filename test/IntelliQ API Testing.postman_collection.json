@@ -1,0 +1,983 @@
+{
+	"info": {
+		"_postman_id": "959450f3-61f7-4ff1-b54b-13429559bb31",
+		"name": "IntelliQ API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25340447"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "Healthchecks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Connected\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/healthcheck",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "QuestionnaireUpd",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.sendRequest('http://localhost:9103/intelliq_api/questionnaire/QQ000', (error, response) => {",
+									"    pm.test(\"Questionnaire is in the DB\", () => {",
+									"        var qqjson = response.json();",
+									"        pm.expect(qqjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qqjson.questionnaireTitle).to.eql('My first research questionnaire');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/P00', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question P00 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('P00');",
+									"        pm.expect(qjson.qtext).to.eql('Ποιο είναι το mail σας;');",
+									"        pm.expect(qjson.required).to.eql('false');",
+									"        pm.expect(qjson.type).to.eql('profile');",
+									"    });",
+									"    pm.test(\"Choice POOTXT is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('P00TXT');",
+									"        pm.expect(optjson.opttxt).to.eql('<open string>');",
+									"        pm.expect(optjson.nextqID).to.eql('P01');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/P01', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question P01 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('P01');",
+									"        pm.expect(qjson.qtext).to.eql('Ποια είναι η ηλικία σας;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('profile');",
+									"    });",
+									"    pm.test(\"Choice P01A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('P01A1');",
+									"        pm.expect(optjson.opttxt).to.eql('<30');",
+									"        pm.expect(optjson.nextqID).to.eql('Q01');",
+									"    });",
+									"    pm.test(\"Choice P01A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('P01A2');",
+									"        pm.expect(optjson.opttxt).to.eql('30-50');",
+									"        pm.expect(optjson.nextqID).to.eql('Q01');",
+									"    });",
+									"    pm.test(\"Choice P01A3 is in the DB\", () => {",
+									"        var optjson = qjson.options[2];",
+									"        pm.expect(optjson.optID).to.eql('P01A3');",
+									"        pm.expect(optjson.opttxt).to.eql('50-70');",
+									"        pm.expect(optjson.nextqID).to.eql('Q01');",
+									"    });",
+									"    pm.test(\"Choice P01A4 is in the DB\", () => {",
+									"        var optjson = qjson.options[3];",
+									"        pm.expect(optjson.optID).to.eql('P01A4');",
+									"        pm.expect(optjson.opttxt).to.eql('>70');",
+									"        pm.expect(optjson.nextqID).to.eql('Q01');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q01', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q01 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q01');",
+									"        pm.expect(qjson.qtext).to.eql('Ποιο είναι το αγαπημένο σας χρώμα;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q01A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q01A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Πράσινο');",
+									"        pm.expect(optjson.nextqID).to.eql('Q02');",
+									"    });",
+									"    pm.test(\"Choice Q01A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q01A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Κόκκινο');",
+									"        pm.expect(optjson.nextqID).to.eql('Q02');",
+									"    });",
+									"    pm.test(\"Choice Q01A3 is in the DB\", () => {",
+									"        var optjson = qjson.options[2];",
+									"        pm.expect(optjson.optID).to.eql('Q01A3');",
+									"        pm.expect(optjson.opttxt).to.eql('Κίτρινο');",
+									"        pm.expect(optjson.nextqID).to.eql('Q02');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q02', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q02 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q02');",
+									"        pm.expect(qjson.qtext).to.eql('Ασχολείστε με το ποδόσφαιρο;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q02A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q02A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Ναι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q03');",
+									"    });",
+									"    pm.test(\"Choice Q02A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q02A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Οχι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q04');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q03', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q03 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q03');",
+									"        pm.expect(qjson.qtext).to.eql('Τι ομάδα είστε;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q03A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q03A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Παναθηναϊκός');",
+									"        pm.expect(optjson.nextqID).to.eql('Q04');",
+									"    });",
+									"    pm.test(\"Choice Q03A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q03A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Ολυμπιακός ');",
+									"        pm.expect(optjson.nextqID).to.eql('Q04');",
+									"    });",
+									"    pm.test(\"Choice Q03A3 is in the DB\", () => {",
+									"        var optjson = qjson.options[2];",
+									"        pm.expect(optjson.optID).to.eql('Q03A3');",
+									"        pm.expect(optjson.opttxt).to.eql('ΑΕΚ');",
+									"        pm.expect(optjson.nextqID).to.eql('Q04');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q04', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q04 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q04');",
+									"        pm.expect(qjson.qtext).to.eql('Έχετε ζήσει σε νησί;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q04A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q04A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Ναι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q05');",
+									"    });",
+									"    pm.test(\"Choice Q04A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q04A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Οχι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q06');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q05', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q05 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q05');",
+									"        pm.expect(qjson.qtext).to.eql('Με δεδομένο ότι απαντήσατε [*Q04A1] στην ερώτηση [*Q04]: Ποια η σχέση σας με το θαλάσσιο σκι;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q05A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q05A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Καμία');",
+									"        pm.expect(optjson.nextqID).to.eql('Q07');",
+									"    });",
+									"    pm.test(\"Choice Q05A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q05A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Μικρή');",
+									"        pm.expect(optjson.nextqID).to.eql('Q07');",
+									"    });",
+									"    pm.test(\"Choice Q05A3 is in the DB\", () => {",
+									"        var optjson = qjson.options[2];",
+									"        pm.expect(optjson.optID).to.eql('Q05A3');",
+									"        pm.expect(optjson.opttxt).to.eql('Μεγάλη');",
+									"        pm.expect(optjson.nextqID).to.eql('Q07');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q06', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q06 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q06');",
+									"        pm.expect(qjson.qtext).to.eql('Είστε χειμερινός κολυμβητής');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q06A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q06A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Ναι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q07');",
+									"    });",
+									"    pm.test(\"Choice Q06A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q06A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Οχι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q07');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q07', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q07 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q07');",
+									"        pm.expect(qjson.qtext).to.eql('Κάνετε χειμερινό σκι;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q07A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q07A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Σπάνια - καθόλου');",
+									"        pm.expect(optjson.nextqID).to.eql('Q08');",
+									"    });",
+									"    pm.test(\"Choice Q07A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q07A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Περιστασιακά');",
+									"        pm.expect(optjson.nextqID).to.eql('Q08');",
+									"    });",
+									"    pm.test(\"Choice Q07A3 is in the DB\", () => {",
+									"        var optjson = qjson.options[2];",
+									"        pm.expect(optjson.optID).to.eql('Q07A3');",
+									"        pm.expect(optjson.opttxt).to.eql('Τακτικά');",
+									"        pm.expect(optjson.nextqID).to.eql('Q08');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q08', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q08 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q08');",
+									"        pm.expect(qjson.qtext).to.eql('Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q08A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q08A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Ναι');",
+									"        pm.expect(optjson.nextqID).to.eql('Q09');",
+									"    });",
+									"    pm.test(\"Choice Q08A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q08A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Οχι');",
+									"        pm.expect(optjson.nextqID).to.eql('NULLQ');",
+									"    });",
+									"});",
+									"",
+									"pm.sendRequest('http://localhost:9103/intelliq_api/question/QQ000/Q09', (error, response) => {",
+									"    var qjson = response.json();",
+									"    pm.test(\"Question Q09 is in the DB\", () => {",
+									"        pm.expect(qjson.questionnaireID).to.eql('QQ000');",
+									"        pm.expect(qjson.qID).to.eql('Q09');",
+									"        pm.expect(qjson.qtext).to.eql('Με δεδομένο ότι απαντήσατε [*Q08A2] στην ερώτηση [*Q08]: Προτιμάτετη θερινή ή την χειμερινή ώρα;');",
+									"        pm.expect(qjson.required).to.eql('true');",
+									"        pm.expect(qjson.type).to.eql('question');",
+									"    });",
+									"    pm.test(\"Choice Q09A1 is in the DB\", () => {",
+									"        var optjson = qjson.options[0];",
+									"        pm.expect(optjson.optID).to.eql('Q09A1');",
+									"        pm.expect(optjson.opttxt).to.eql('Θερινή');",
+									"        pm.expect(optjson.nextqID).to.eql('NULLQ');",
+									"    });",
+									"    pm.test(\"Choice Q09A2 is in the DB\", () => {",
+									"        var optjson = qjson.options[1];",
+									"        pm.expect(optjson.optID).to.eql('Q09A2');",
+									"        pm.expect(optjson.opttxt).to.eql('Χειμερινή');",
+									"        pm.expect(optjson.nextqID).to.eql('NULLQ');",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 1s\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "jsonFile",
+									"contentType": "application/json",
+									"description": "application/json",
+									"type": "file",
+									"src": "qq.json"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"questionnaire_upd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetAll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Database is Empty\", function () {\r",
+									"        for (var i = 1; i <= 10; i++) {\r",
+									"        qqid = \"QQ\" + i;\r",
+									"        for (var j = 1; j <= 20; j++) {\r",
+									"            qid = \"Q\" + i\r",
+									"            var url = \"localhost:9103/intelliq_api/getquestionanswers/\" + qqid + \"/\" + qid;\r",
+									"            pm.sendRequest({\r",
+									"                url: url,\r",
+									"                method: \"GET\",\r",
+									"            }, function (err, res) {\r",
+									"                        pm.expect(res.code).to.equal(402);\r",
+									"                        pm.expect(res.responseTime).to.be.below(200);\r",
+									"            });\r",
+									"\r",
+									"        }\r",
+									"        \r",
+									"    }\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/resetall",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"resetall"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetQ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var qqid = 'QQ1'\r",
+									"var qid = 'Q1' // Default values the API call is made with\r",
+									"var url = \"localhost:9103/intelliq_api/getquestionanswers/\" + qqid + '/' + qid;\r",
+									"pm.sendRequest({\r",
+									"            url: url,\r",
+									"            method: \"GET\",\r",
+									"        }, function (err, res) {\r",
+									"                pm.test(\"Questionnaire is Empty\", function () {\r",
+									"                    pm.expect(res.code).to.equal(402);\r",
+									"                }); \r",
+									"            });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/resetq/{{QQID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"resetq",
+								"{{QQID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Test Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/insert_testdata",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"insert_testdata"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"for (var i = 1; i <= 10; i++) {\r",
+							"    for (var j = 1; j <= 20; j++) {\r",
+							"        pm.variables.set(\"QQID\", \"QQ\" + i);\r",
+							"        pm.variables.set(\"QID\", \"Q\" + j);\r",
+							"        var url = \"localhost:9103/intelliq_api/question/\" + encodeURIComponent(pm.variables.get(\"QQID\")) + \"/\" + encodeURIComponent(pm.variables.get(\"QID\"));\r",
+							"        pm.sendRequest({\r",
+							"            url: url,\r",
+							"            method: \"GET\",\r",
+							"        }, function (err, res) {\r",
+							"                pm.test(\"Status code is 200\", function () {\r",
+							"                     pm.expect(res.code).to.equal(200);\r",
+							"                });\r",
+							"\r",
+							"\r",
+							"                pm.test(\"Response time is less than 200ms\", function () {\r",
+							"                    pm.expect(res.responseTime).to.be.below(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Content type is valid\", function () {\r",
+							"                    var jsonData = res.json();\r",
+							"                    pm.expect(jsonData.questionnaireID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.qID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.qtext).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.required).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.type).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.options).to.be.an(\"array\");\r",
+							"                    jsonData.options.forEach(function(opt) {\r",
+							"                    pm.expect(opt.optID).to.be.a(\"string\");\r",
+							"                    pm.expect(opt.opttxt).to.be.a(\"string\");\r",
+							"                    pm.expect(opt.nextqID).to.be.a(\"string\");\r",
+							"                }); \r",
+							"            });\r",
+							"\r",
+							"        });\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/question/{{QQID}}/{{QID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"question",
+						"{{QQID}}",
+						"{{QID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Questionnaire",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"for (var i = 1; i <= 10; i++) {\r",
+							"    pm.variables.set(\"QQID\", \"QQ\" + i);\r",
+							"    var url = \"localhost:9103/intelliq_api/questionnaire/\" + encodeURIComponent(pm.variables.get(\"QQID\"));\r",
+							"\r",
+							"    pm.sendRequest({\r",
+							"            url: url,\r",
+							"            method: \"GET\",\r",
+							"        }, function (err, res) {\r",
+							"                pm.test(\"Status code is 200\", function () {\r",
+							"                     pm.expect(res.code).to.equal(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Response time is less than 200ms\", function () {\r",
+							"                    pm.expect(res.responseTime).to.be.below(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Content type is valid\", function () {\r",
+							"                    var jsonData = res.json();\r",
+							"                    pm.expect(jsonData.questionnaireID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.questionnaireTitle).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.questions).to.be.an(\"array\")\r",
+							"                    pm.expect(jsonData.keywords).to.be.an(\"array\");\r",
+							"                    jsonData.keywords.forEach(function(keyword) {\r",
+							"                    pm.expect(keyword).to.be.a(\"string\");\r",
+							"                }); \r",
+							"            });\r",
+							"\r",
+							"        });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/questionnaire/{{QQID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"questionnaire",
+						"{{QQID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DoAnswer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"sessionID = pm.environment.get(\"session\");\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"            \r",
+							"pm.sendRequest({\r",
+							"    url: \"http://localhost:9103/intelliq_api/getsessionanswers/QQ1/\"+ sessionID,\r",
+							"    method: \"GET\",\r",
+							"    }, function (err, res) {\r",
+							"        var sessionAnswers = res.json().answers;\r",
+							"        var dataInDB = sessionAnswers.find(function (answer) {      \r",
+							"        return answer.qID === pm.variables.get(\"QID\") &&\r",
+							"            answer.ans === pm.variables.get(\"optionID\");\r",
+							"        });\r",
+							"\r",
+							"        pm.test(\"Data is in the database\", function () {\r",
+							"            pm.expect(dataInDB).to.exist;\r",
+							"        });\r",
+							"        \r",
+							"    });\r",
+							"\r",
+							"    \r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var sessionID = 'TEST' + Math.floor(Math.random() * 100000)\r",
+							"\r",
+							"pm.variables.set(\"QQID\", \"QQ1\");\r",
+							"pm.variables.set(\"QID\", \"Q1\");\r",
+							"pm.environment.set(\"session\", sessionID);\r",
+							"pm.variables.set(\"optionID\", \"Choice1\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/{{QQID}}/{{QID}}/{{session}}/{{optionID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						"{{QQID}}",
+						"{{QID}}",
+						"{{session}}",
+						"{{optionID}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSessionAnswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"for (var i = 1; i <= 10; i++) {\r",
+							"    pm.variables.set(\"QQID\", \"QQ\" + i);\r",
+							"    for (var j = 1; j <= 80; j++) {\r",
+							"        pm.variables.set(\"session\", \"Session\" + j);\r",
+							"        var url = \"localhost:9103/intelliq_api/getsessionanswers/\" + encodeURIComponent(pm.variables.get(\"QQID\")) + \"/\" + encodeURIComponent(pm.variables.get(\"session\"));\r",
+							"\r",
+							"        pm.sendRequest({\r",
+							"            url: url,\r",
+							"            method: \"GET\",\r",
+							"        }, function (err, res) {\r",
+							"                pm.test(\"Status code is 200\", function () {\r",
+							"                     pm.expect(res.code).to.equal(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Response time is less than 200ms\", function () {\r",
+							"                    pm.expect(res.responseTime).to.be.below(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Content type is valid\", function () {\r",
+							"                    var jsonData = res.json();\r",
+							"                    pm.expect(jsonData.questionnaireID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.session).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.answers).to.be.an(\"array\")\r",
+							"                    jsonData.answers.forEach(function(answer) {\r",
+							"                    pm.expect(answer.qID).to.be.a(\"string\");\r",
+							"                    pm.expect(answer.ans).to.be.a(\"string\");\r",
+							"                }); \r",
+							"            });\r",
+							"\r",
+							"        });\r",
+							"\r",
+							"    }\r",
+							"    \r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/{{QQID}}/{{session}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						"{{QQID}}",
+						"{{session}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetQuestionAnswers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"for (var i = 1; i <= 10; i++) {\r",
+							"    pm.variables.set(\"QQID\", \"QQ\" + i);\r",
+							"    for (var j = 1; j <= 20; j++) {\r",
+							"        pm.variables.set(\"QID\", \"Q\" + j);\r",
+							"        var url = \"localhost:9103/intelliq_api/getquestionanswers/\" + encodeURIComponent(pm.variables.get(\"QQID\")) + \"/\" + encodeURIComponent(pm.variables.get(\"QID\"));\r",
+							"\r",
+							"        pm.sendRequest({\r",
+							"            url: url,\r",
+							"            method: \"GET\",\r",
+							"        }, function (err, res) {\r",
+							"\r",
+							"                pm.test(\"Response time is less than 200ms\", function () {\r",
+							"                    pm.expect(res.responseTime).to.be.below(200);\r",
+							"                });\r",
+							"\r",
+							"                pm.test(\"Content type is valid\", function () {\r",
+							"                    var jsonData = res.json();\r",
+							"                    pm.expect(jsonData.questionnaireID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.questionID).to.be.a(\"string\");\r",
+							"                    pm.expect(jsonData.answers).to.be.an(\"array\")\r",
+							"                    jsonData.answers.forEach(function(answer) {\r",
+							"                    pm.expect(answer.session).to.be.a(\"string\");\r",
+							"                    pm.expect(answer.ans).to.be.a(\"string\");\r",
+							"                }); \r",
+							"            });\r",
+							"\r",
+							"        });\r",
+							"\r",
+							"    }\r",
+							"    \r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/{{QQID}}/{{QID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						"{{QQID}}",
+						"{{QID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetLastSessid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Questionnaire is in the DB\", () => {",
+							"    var resp_json = pm.response.json();",
+							"    pm.expect(resp_json.sessionID).to.eql('Session80');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getlastsessid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getlastsessid"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "QID",
+			"value": "Q1",
+			"type": "string"
+		},
+		{
+			"key": "QQID",
+			"value": "QQ1",
+			"type": "string"
+		},
+		{
+			"key": "session",
+			"value": "Session1"
+		},
+		{
+			"key": "optionID",
+			"value": "Choice1"
+		}
+	]
+}

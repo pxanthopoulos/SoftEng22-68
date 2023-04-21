@@ -1,0 +1,5 @@
+argparse
+requests
+pytest
+asyncio
+pytest-asyncio

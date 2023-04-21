@@ -1,0 +1,35 @@
+{% extends "global_layout.html" %}
+
+{% block title %}
+Select Questionnaire
+{% endblock title %}
+
+{% block content %}
+<br>
+<form id="questionnaireForm" style="text-align: center; padding: 10px 20px;">
+    <label for="questionnaireID">Enter Questionnaire ID:</label>
+    <input type="text" id="questionnaireID" placeholder="This field is required" name="questionnaireID" required>
+</form>
+
+<button id="firstButton" class="btn btn-danger" onclick=" fetchQuestionnaire()"
+style="margin: 0 auto; display: block;">Select Questionnaire</button><br/>
+
+
+<br>
+<div class="card" id="card-container">
+            
+    <div class="card-body" id="card">
+        <div class="table-responsive"> 
+        </div>
+    </div>
+    
+</div>
+<br/>
+
+<div>
+    <button id="secondButton" class="btn btn-danger"  onclick=" answer()"
+            style="margin: 0 auto; display: none;">Answer Selected Questionnaire</button>
+</div>
+
+<script src="../templates/qqselect.js"></script>
+{% endblock content %}
