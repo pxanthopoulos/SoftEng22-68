@@ -1,4 +1,4 @@
-This is the Software Engineering project for the Software Engineering class (7th semester, ECE NTUA, 2022-2023).
+This is a Software Engineering project for the Software Engineering class (7th semester, ECE NTUA, 2022-2023). It is a full stack application for creating and answering intelligent questionnaires.
 
 Group: softeng2022-68
 
